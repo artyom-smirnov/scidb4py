@@ -22,9 +22,9 @@ conn = Connection('localhost', 1239)
 conn.open()
 conn.prepare("select * from array(<a:int32>[x=0:3,2,0], '[0,1,2,3]')")
 array = conn.execute()
-while not a.eof:
-    print '%s - %s' % (a.get_coordinates(), a.get_item("a"))
-    a.next_item(True)
+while not array.eof:
+    print '%s - %s' % (array.get_coordinates(), array.get_item("a"))
+    array.next_item(True)
 conn.close()
 ```
 
@@ -33,10 +33,10 @@ conn.close()
 from scidbpy import Connection
 conn = Connection('localhost', 1239)
 conn.open()
-self.connection.prepare("select * from array(<a:int32 null>[x=0:2,3,0, y=0:2,3,0], '[[1,2,3][4,5,6][7,8,9]]')")
-a = self.connection.execute()
+conn.prepare("select * from array(<a:int32 null>[x=0:2,3,0, y=0:2,3,0], '[[1,2,3][4,5,6][7,8,9]]')")
+array = conn.execute()
 while not a.eof:
-    print '%s - %s' % (a.get_coordinates(), a.get_item("a"))
-    a.next_item(True)
+    print '%s - %s' % (array.get_coordinates(), array.get_item("a"))
+    array.next_item(True)
 conn.close()
 ```

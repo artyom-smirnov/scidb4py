@@ -25,25 +25,32 @@ class Result(object):
         hdr = query_result_msg.header
         rec = query_result_msg.record
         array_name = rec.array_name
-        attributes = []
-        for a in rec.attributes:
-            attributes.append(Attribute(a.id, a.name, a.type, a.flags))
-        dimensions = []
-        for d in rec.dimensions:
-            dimensions.append(
-                Dimension(
-                    d.name,
-                    d.type_id,
-                    d.flags,
-                    d.start_min,
-                    d.curr_start,
-                    d.curr_end,
-                    d.end_max,
-                    d.chunk_interval
+
+        self._schema = None
+        if len(rec.attributes) > 0:
+            attributes = []
+            for a in rec.attributes:
+                attributes.append(Attribute(a.id, a.name, a.type, a.flags))
+            dimensions = []
+            for d in rec.dimensions:
+                dimensions.append(
+                    Dimension(
+                        d.name,
+                        d.type_id,
+                        d.flags,
+                        d.start_min,
+                        d.curr_start,
+                        d.curr_end,
+                        d.end_max,
+                        d.chunk_interval
+                    )
                 )
-            )
+            self._schema = Schema(array_name, attributes, dimensions)
+
         self._query_id = hdr.query_id
-        self._schema = Schema(array_name, attributes, dimensions)
+        self._selective = rec.selective
+        self._explain_logical = rec.explain_logical
+        self._explain_physical = rec.explain_physical
 
     @property
     def query_id(self):
@@ -64,3 +71,15 @@ class Result(object):
         :return: array schema
         """
         return self._schema
+
+    @property
+    def selective(self):
+        return self._selective
+
+    @property
+    def explain_logical(self):
+        return self._explain_logical
+
+    @property
+    def explain_physical(self):
+        return self._explain_physical

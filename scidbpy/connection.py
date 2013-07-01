@@ -32,6 +32,7 @@ class Connection(object):
         self._host = host
         self._port = port
         self._net = Network(host, port)
+        self._result = None
 
     def open(self):
         """
@@ -45,13 +46,7 @@ class Connection(object):
         """
         self._net.close()
 
-    def prepare(self, query_string, afl=False):
-        """
-        Prepare query
-        :param query_string: Query string
-        :param afl: AFL/AQL flag
-        :rtype : scidbpy.result.Result
-        """
+    def execute(self, query_string, afl=False):
         r = scidb_msg_pb2.Query()
         r.query = query_string
         r.afl = afl
@@ -61,13 +56,7 @@ class Connection(object):
 
         msg = self._net.receive()
         self._query_id = msg.header.query_id
-        return Result(msg)
 
-    def execute(self):
-        """
-        Execute prepared query and return result array
-        :rtype : scidbpy.array.Array
-        """
         r = scidb_msg_pb2.Query()
         r.query = ''
         r.afl = False
@@ -76,7 +65,9 @@ class Connection(object):
         self._net.send(Message(h, r))
 
         msg = self._net.receive()
-        return Array(Result(msg), self._net)
+        self._result = Result(msg)
+
+        return Array(self._result, self._net) if self._result.selective else None
 
     def commit(self):
         """
@@ -84,6 +75,7 @@ class Connection(object):
         """
         h = Header(mtCompleteQuery, query_id=self._query_id)
         self._net.send(Message(h))
+        self._net.receive()
 
     def rollback(self):
         """
@@ -91,6 +83,8 @@ class Connection(object):
         """
         h = Header(mtCancelQuery, query_id=self._query_id)
         self._net.send(Message(h))
+        self._net.receive()
 
-
-
+    @property
+    def result(self):
+        return self._result

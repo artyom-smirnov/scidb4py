@@ -32,8 +32,8 @@ class Basic(unittest.TestCase):
         cls.connection.close()
 
     def test_select(self):
-        self.connection.prepare("select * from array(<a:int32 null>[x=0:2,3,0, y=0:2,3,0], '[[1,2,3][4,5,6][7,8,9]]')")
-        a = self.connection.execute()
+        a = self.connection.execute("select * from array(<a:int32 null>[x=0:2,3,0, y=0:2,3,0], '[[1,2,3][4,5,6][7,8,9]]')")
+        print self.connection.result.selective
 
         while not a.eof:
             print '%s - %s' % (a.get_coordinates(), a.get_item("a"))

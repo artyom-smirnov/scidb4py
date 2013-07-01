@@ -56,6 +56,8 @@ class Network(object):
             if h.message_type == mtError:
                 rec = scidb_msg_pb2.Error()
                 rec.ParseFromString(recBuf)
+                if rec.long_error_code == 0:
+                    return None
                 raise ExecutionError(rec.what_str)
             elif h.message_type == mtQueryResult:
                 rec = scidb_msg_pb2.QueryResult()
