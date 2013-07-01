@@ -24,7 +24,7 @@ class Basic(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.connection = Connection('10.81.1.145', 1239)
+        cls.connection = Connection('localhost', 1239)
         cls.connection.open()
 
     @classmethod
@@ -32,20 +32,12 @@ class Basic(unittest.TestCase):
         cls.connection.close()
 
     def test_select(self):
-        self.connection.prepare("select * from array(empty <a:string null>[x=0:2,3,0], '[\"qwe\",(),\"eeeee\"]')")
+        self.connection.prepare("select * from array(<a:int32 null>[x=0:2,3,0, y=0:2,3,0], '[[1,2,3][4,5,6][7,8,9]]')")
         a = self.connection.execute()
 
-        while True:
-            a.fetch()
-            if a.eof:
-                break
-            c = a.get_chunk(1)
-
-            while True:
-                if c.end:
-                    break
-                print c.get_coordinates()
-                print c.next()
+        while not a.eof:
+            print '%s - %s' % (a.get_coordinates(), a.get_item("a"))
+            a.next_item(True)
 
 if __name__ == '__main__':
     unittest.main()

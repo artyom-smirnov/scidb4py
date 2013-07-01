@@ -26,6 +26,10 @@ class DummyEOFChunk(object):
     def eof(self):
         return True
 
+    @property
+    def end(self):
+        return True
+
 
 def make_chunk(chunk_msg, array):
     rec = chunk_msg.record
@@ -33,7 +37,6 @@ def make_chunk(chunk_msg, array):
     if rec.eof:
         return DummyEOFChunk()
 
-    array_id = rec.array_id
     attribute_id = rec.attribute_id
     attribute = array.schema.attributes[attribute_id]
     sparse = rec.sparse
@@ -61,9 +64,9 @@ def make_chunk(chunk_msg, array):
     magic = ConstBitStream(bytes=chunk_data, length=64).read('uintle:64')
     if rle:
         if magic == RLE_PAYLOAD_MAGIC:
-            return RLEChunk(chunk_data, array_id, attribute, start_pos, end_pos, chunk_len)
+            return RLEChunk(chunk_data, attribute, start_pos, end_pos, chunk_len)
         elif magic == RLE_BITMAP_PAYLOAD_MAGIC:
-            return RLEBitmapChunk(chunk_data, array_id, attribute, start_pos, end_pos, chunk_len)
+            return RLEBitmapChunk(chunk_data, attribute, start_pos, end_pos, chunk_len)
         else:
             raise InternalError('Unknown chunk format')
     else:
