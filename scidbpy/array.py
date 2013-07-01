@@ -67,7 +67,7 @@ class Array(object):
         return self._chunks
 
     def next_item(self, next_chunk=False):
-        if self.eof or self.end:
+        if self.end or self.chunk_end:
             return
 
         if self._bitmap is not None:
@@ -77,7 +77,7 @@ class Array(object):
             c.next_item()
             self._end |= c.end
 
-        if self.end and next_chunk:
+        if self.chunk_end and next_chunk:
             self.next_chunk()
 
     def get_coordinates(self):
@@ -87,7 +87,7 @@ class Array(object):
             return self.bitmap.get_coordinates()
 
     @property
-    def end(self):
+    def chunk_end(self):
         return self._end
 
     def get_item(self, attribute_id):
@@ -103,7 +103,7 @@ class Array(object):
         return self._bitmap
 
     @property
-    def eof(self):
+    def end(self):
         return self._eof
 
     def get_chunk(self, attribute_id):

@@ -24,7 +24,7 @@ class Basic(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.connection = Connection('localhost', 1239)
+        cls.connection = Connection('10.81.1.145')
         cls.connection.open()
 
     @classmethod
@@ -35,7 +35,7 @@ class Basic(unittest.TestCase):
         a = self.connection.execute("select * from array(<a:int32 null>[x=0:2,3,0, y=0:2,3,0], '[[1,2,3][4,5,6][7,8,9]]')")
         print self.connection.result.selective
 
-        while not a.eof:
+        while not a.end:
             print '%s - %s' % (a.get_coordinates(), a.get_item("a"))
             a.next_item(True)
 
