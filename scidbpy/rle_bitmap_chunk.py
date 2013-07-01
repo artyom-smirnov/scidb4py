@@ -66,14 +66,13 @@ class RLEBitmapChunkSegment(object):
 
 
 class RLEBitmapChunk(object):
-    def __init__(self, chunk_data, array_id, attribute_id, start_pos, end_pos, chunk_len, compression_method):
+    def __init__(self, chunk_data, array_id, attribute, start_pos, end_pos, chunk_len):
         self._chunk_data_stream = ConstBitStream(bytes=chunk_data)
         self._array_id = array_id
-        self._attribute_id = attribute_id
+        self._attribute_id = attribute.id
         self._start_pos = start_pos
         self._end_pos = end_pos
         self._chunk_len = chunk_len
-        self._compression_method = compression_method
 
         self._chunk_header = RLEBitmapChunkHeader(self._chunk_data_stream)
 

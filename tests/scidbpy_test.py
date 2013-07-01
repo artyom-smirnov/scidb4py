@@ -32,21 +32,20 @@ class Basic(unittest.TestCase):
         cls.connection.close()
 
     def test_select(self):
-        self.connection.prepare("select * from array(<a:int32>[x=0:2,3,0],'[1,(),3]')")
+        self.connection.prepare("select * from array(empty <a:string null>[x=0:2,3,0], '[\"qwe\",(),\"eeeee\"]')")
         a = self.connection.execute()
 
         while True:
             a.fetch()
             if a.eof:
                 break
-            empty = a.get_chunk(1)
-            coords = empty.get_coordinates()
-            self.assertEqual(coords[0], 0)
-            empty.next()
-            coords = empty.get_coordinates()
-            self.assertEqual(coords[0], 2)
-            self.assertFalse(empty.next())
+            c = a.get_chunk(1)
 
+            while True:
+                if c.end:
+                    break
+                print c.get_coordinates()
+                print c.next()
 
 if __name__ == '__main__':
     unittest.main()

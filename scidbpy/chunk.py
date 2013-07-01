@@ -35,18 +35,16 @@ def make_chunk(chunk_msg, array):
 
     array_id = rec.array_id
     attribute_id = rec.attribute_id
+    attribute = array.schema.attributes[attribute_id]
     sparse = rec.sparse
     compression_method = rec.compression_method
     chunk_data = chunk_msg.binary
     rle = rec.rle
 
-    if not rle:
-        raise NotImplementedError('Not-RLE chunks not supported yet')
-
     if sparse:
         raise NotImplementedError('Sparse chunks not supported yet')
 
-    if compression_method !=0:
+    if compression_method != 0:
         raise NotImplementedError('Compressed chunks not supported yet')
 
     start_pos = []
@@ -61,10 +59,13 @@ def make_chunk(chunk_msg, array):
         chunk_len.append(end_coord - coord + 1)
 
     magic = ConstBitStream(bytes=chunk_data, length=64).read('uintle:64')
-    if magic == RLE_PAYLOAD_MAGIC:
-        return RLEChunk(chunk_data, array_id, attribute_id, start_pos, end_pos, chunk_len, compression_method)
-    elif magic == RLE_BITMAP_PAYLOAD_MAGIC:
-        return RLEBitmapChunk(chunk_data, array_id, attribute_id, start_pos, end_pos, chunk_len, compression_method)
+    if rle:
+        if magic == RLE_PAYLOAD_MAGIC:
+            return RLEChunk(chunk_data, array_id, attribute, start_pos, end_pos, chunk_len)
+        elif magic == RLE_BITMAP_PAYLOAD_MAGIC:
+            return RLEBitmapChunk(chunk_data, array_id, attribute, start_pos, end_pos, chunk_len)
+        else:
+            raise InternalError('Unknown chunk format')
     else:
-        raise InternalError('Unknown chunk format')
+        raise InternalError('Dense chunk not yet supported')
 
