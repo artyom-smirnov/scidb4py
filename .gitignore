@@ -1,5 +1,6 @@
 *.pyc
 .idea
-
 scidbpy/scidb_msg_pb2.py
 build
+.coverage
+htmlcov

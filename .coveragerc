@@ -1,0 +1,11 @@
+[run]
+branch = True
+source = scidbpy
+
+[report]
+exclude_lines =
+	raise InternalError
+	raise NotImplementedError
+
+[html]
+title = scidbpy tests coverate report
