@@ -3,11 +3,11 @@
 Pure python SciDB client library implementation
 
 ## Runtime dependencies
-* python >= 2.7?
+* python >= 2.7 or pypy >= 1.8 (python 3 not supported yet)
 * python-protobuf >= 2.4
 * bitstring
 
-# Build dependencies
+## Build dependencies
 * protobuf-compiler >= 2.4
 
 ## Installation
