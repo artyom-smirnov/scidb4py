@@ -64,9 +64,9 @@ def make_chunk(chunk_msg, array):
     magic = ConstBitStream(bytes=chunk_data, length=64).read('uintle:64')
     if rle:
         if magic == RLE_PAYLOAD_MAGIC:
-            return RLEChunk(chunk_data, attribute, start_pos, end_pos, chunk_len)
+            return RLEChunk(chunk_data, attribute, start_pos, end_pos, chunk_len, array.schema)
         elif magic == RLE_BITMAP_PAYLOAD_MAGIC:
-            return RLEBitmapChunk(chunk_data, attribute, start_pos, end_pos, chunk_len)
+            return RLEBitmapChunk(chunk_data, attribute, start_pos, end_pos, chunk_len, array.schema)
         else:
             raise InternalError('Unknown chunk format')
     else:

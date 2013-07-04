@@ -15,20 +15,19 @@ Pure python SciDB client library implementation
 
 ## Examples
 
-### Fetching array item-by-item (autofetching of next chunks)
+### Iterating through array item-by-item
 ```
 from scidbpy import Connection
 conn = Connection('localhost', 1239)
 conn.open()
 conn.prepare("select * from array(<a:int32>[x=0:3,2,0], '[0,1,2,3]')")
 array = conn.execute()
-while not array.end:
-    print '%s - %s' % (array.get_coordinates(), array.get_item("a"))
-    array.next_item(True)
+for cell in array:
+    print '%d - %d' % (cell[0]['x'], cell[1]['a'])
 conn.close()
 ```
 
-### Fetching array chunk-by-chunk, item-by-item
+### Iterating through array chunk-by-chunk, item-by-item
 ```
 from scidbpy import Connection
 conn = Connection('localhost', 1239)

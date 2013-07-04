@@ -66,12 +66,13 @@ class RLEBitmapChunkSegment(object):
 
 
 class RLEBitmapChunk(object):
-    def __init__(self, chunk_data, attribute, start_pos, end_pos, chunk_len):
+    def __init__(self, chunk_data, attribute, start_pos, end_pos, chunk_len, schema):
         self._chunk_data_stream = ConstBitStream(bytes=chunk_data)
         self._attribute_id = attribute.id
         self._start_pos = start_pos
         self._end_pos = end_pos
         self._chunk_len = chunk_len
+        self._schema = schema
 
         self._chunk_header = RLEBitmapChunkHeader(self._chunk_data_stream)
 
@@ -110,8 +111,10 @@ class RLEBitmapChunk(object):
 
     def get_coordinates(self):
         l = self._cur_logical_position
-        coords = []
+        coords = {}
         for i in xrange(len(self._start_pos)-1, -1, -1):
-            coords.append(self._start_pos[i] + l % self._chunk_len[i])
+            pos = self._start_pos[i] + l % self._chunk_len[i]
+            coords[self._schema.dimensions[i].name] = pos
+            coords[i] = pos
             l /= self._chunk_len[i]
         return coords

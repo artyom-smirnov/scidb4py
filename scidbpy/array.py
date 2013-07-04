@@ -25,10 +25,10 @@ class Array(object):
         self._query_id = result.query_id
         self._schema = result.schema
         self._net = network
-        self._eof = False
+        self._array_end = False
         self._chunks = []
         self._bitmap = None
-        self._end = False
+        self._chunk_end = False
 
         self._attributes_name_id_mapping = {}
         for a in self.schema.attributes:
@@ -43,7 +43,7 @@ class Array(object):
         :rtype : list
         :return: chunks list
         """
-        self._end = False
+        self._chunk_end = False
         self._chunks = []
         for a in self.schema.attributes:
             r = scidb_msg_pb2.Fetch()
@@ -56,8 +56,8 @@ class Array(object):
             msg = self._net.receive()
             chunk = make_chunk(msg, self)
 
-            self._eof |= chunk.eof
-            self._end |= chunk.end
+            self._array_end |= chunk.eof
+            self._chunk_end |= chunk.end
 
             if a.type == TID_INDICATOR:
                 self._bitmap = chunk
@@ -66,19 +66,33 @@ class Array(object):
 
         return self._chunks
 
-    def next_item(self, next_chunk=False):
-        if self.end or self.chunk_end:
-            return
-
+    def next_item(self):
         if self._bitmap is not None:
             self._bitmap.next_item()
-            self._end |= self._bitmap.end
+            self._chunk_end |= self._bitmap.end
         for c in self._chunks:
             c.next_item()
-            self._end |= c.end
+            self._chunk_end |= c.end
 
-        if self.chunk_end and next_chunk:
-            self.next_chunk()
+    def __iter__(self):
+        while True:
+            if self.end:
+                return
+
+            if self.chunk_end:
+                self.next_chunk()
+                continue
+
+            attributes = {}
+            for a in self.schema.attributes:
+                if a.type == TID_INDICATOR:
+                    continue
+                val = self.get_item(a.id)
+                attributes[a.id] = val
+                attributes[a.name] = val
+
+            yield (self.get_coordinates(), attributes)
+            self.next_item()
 
     def get_coordinates(self):
         if self.bitmap is None:
@@ -88,7 +102,7 @@ class Array(object):
 
     @property
     def chunk_end(self):
-        return self._end
+        return self._chunk_end
 
     def get_item(self, attribute_id):
         if isinstance(attribute_id, int):
@@ -104,7 +118,7 @@ class Array(object):
 
     @property
     def end(self):
-        return self._eof
+        return self._array_end
 
     def get_chunk(self, attribute_id):
         """

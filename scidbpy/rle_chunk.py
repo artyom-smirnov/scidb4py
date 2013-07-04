@@ -88,7 +88,7 @@ class RLEChunkSegment(object):
 
 
 class RLEChunk(object):
-    def __init__(self, chunk_data, attribute, start_pos, end_pos, chunk_len):
+    def __init__(self, chunk_data, attribute, start_pos, end_pos, chunk_len, schema):
         self._chunk_data_stream = ConstBitStream(bytes=chunk_data)
         self._attribute_id = attribute.id
         self._type_id = attribute.type
@@ -96,6 +96,7 @@ class RLEChunk(object):
         self._end_pos = end_pos
         self._chunk_len = chunk_len
         self._chunk_header = RLEChunkHeader(self._chunk_data_stream)
+        self._schema = schema
 
         self._cur_seg = 0
         self._cur_value_index = 0
@@ -169,9 +170,11 @@ class RLEChunk(object):
 
     def get_coordinates(self):
         l = self._element_number
-        coords = []
+        coords = {}
         for i in xrange(len(self._start_pos) - 1, -1, -1):
-            coords.append(self._start_pos[i] + l % self._chunk_len[i])
+            pos = self._start_pos[i] + l % self._chunk_len[i]
+            coords[self._schema.dimensions[i].name] = pos
+            coords[i] = pos
             l /= self._chunk_len[i]
         return coords
 
