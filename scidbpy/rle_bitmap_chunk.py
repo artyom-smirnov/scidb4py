@@ -87,6 +87,18 @@ class RLEBitmapChunk(object):
         self._cur_seg = 0
 
     @property
+    def start_pos(self):
+        return self._start_pos
+
+    @property
+    def end_pos(self):
+        return self._end_pos
+
+    @property
+    def len(self):
+        return self._chunk_len
+
+    @property
     def eof(self):
         return False
 

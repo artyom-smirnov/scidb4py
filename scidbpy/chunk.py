@@ -19,7 +19,7 @@ from scidbpy.error import InternalError
 from bitstring import ConstBitStream
 from scidbpy.rle_chunk import RLEChunk, RLE_PAYLOAD_MAGIC
 from scidbpy.rle_bitmap_chunk import RLEBitmapChunk, RLE_BITMAP_PAYLOAD_MAGIC
-
+from scidbpy.dense_chunk import DenseChunk
 
 class DummyEOFChunk(object):
     @property
@@ -55,14 +55,15 @@ def make_chunk(chunk_msg, array):
     chunk_len = []
     for i, coord in enumerate(rec.coordinates):
         dim = array.schema.dimensions[i]
-        end_coord = coord + dim.chunk_interval + 1
+        end_coord = coord + dim.chunk_interval - 1
         end_coord = dim.end_max if end_coord > dim.end_max else end_coord
         start_pos.append(coord)
         end_pos.append(end_coord)
         chunk_len.append(end_coord - coord + 1)
 
-    magic = ConstBitStream(bytes=chunk_data, length=64).read('uintle:64')
     if rle:
+        magic = ConstBitStream(bytes=chunk_data, length=64).read('uintle:64')
+
         if magic == RLE_PAYLOAD_MAGIC:
             return RLEChunk(chunk_data, attribute, start_pos, end_pos, chunk_len, array.schema)
         elif magic == RLE_BITMAP_PAYLOAD_MAGIC:
@@ -70,5 +71,5 @@ def make_chunk(chunk_msg, array):
         else:
             raise InternalError('Unknown chunk format')
     else:
-        raise InternalError('Dense chunk not yet supported')
+        return DenseChunk(chunk_data, attribute, start_pos, end_pos, chunk_len, array.schema)
 

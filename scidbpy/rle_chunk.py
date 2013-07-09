@@ -128,6 +128,17 @@ class RLEChunk(object):
 
         self._eval_cur_value_index()
 
+    @property
+    def start_pos(self):
+        return self._start_pos
+
+    @property
+    def end_pos(self):
+        return self._end_pos
+
+    @property
+    def len(self):
+        return self._chunk_len
 
     @property
     def eof(self):

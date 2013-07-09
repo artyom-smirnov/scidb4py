@@ -99,7 +99,7 @@ class Dimension:
         return self._name
 
     @property
-    def type_id(self):
+    def type(self):
         """
         Dimension type
 
@@ -133,7 +133,7 @@ class Dimension:
         return self._chunk_interval
 
     def __str__(self):
-        return self.name + '(' + self.type_id + ')'
+        return self.name + '(' + self.type + ')'
 
 
 class Schema(object):
