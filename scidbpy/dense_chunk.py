@@ -29,11 +29,13 @@ class DenseChunk(object):
         self._curr_elem = 0
         self._end = False
         self._schema = schema
+        self._nullable = attribute.nullable
 
         self._n_elems = 1
         for i in range(0, len(self._start_pos)):
             interval = self._end_pos[i] - self._start_pos[i] + 1
             self._n_elems *= interval
+        self._bitmap_size = ((self._n_elems + 7) >> 3) if attribute.nullable else 0
 
         self._varying_offs = 0
         self._elem_size = type_bitsize(attribute.type)
@@ -69,16 +71,10 @@ class DenseChunk(object):
         self._calc_buf_pos()
 
     def _calc_buf_pos(self):
-        self._buf_pos = self._curr_elem >> 3 if self._elem_size == 0 else self._curr_elem * self._elem_size
-
+        self._buf_pos = self._bitmap_size + (self._curr_elem >> 3 if self._elem_size == 0 else self._curr_elem * self._elem_size)
     @property
     def end(self):
         return self._end
-
-    def get_item(self):
-        if self.end:
-            return None
-        return self._item_getter()
 
     @property
     def eof(self):
@@ -93,6 +89,23 @@ class DenseChunk(object):
             coords[i] = pos
             l /= self._chunk_len[i]
         return coords
+
+    def get_item(self):
+        if self.end:
+            return None
+
+        if self._nullable:
+            null = False
+            pos_tmp = self._buf_pos
+            bitmap_pos = self._curr_elem >> 3
+            self._chunk_data_stream._setbytepos(bitmap_pos)
+            if self._chunk_data_stream.read('uintle:8') & (1 << (self._curr_elem & 7)):
+                null = True
+            self._buf_pos = pos_tmp
+            if null:
+                return None
+
+        return self._item_getter()
 
     def _get_int8(self):
         self._chunk_data_stream._setbytepos(self._buf_pos)
@@ -146,7 +159,7 @@ class DenseChunk(object):
     def _get_string(self):
         self._chunk_data_stream._setbytepos(self._buf_pos)
         data_offset = self._chunk_data_stream.read('intle:32')
-        _buf_pos = data_offset + self._varying_offs
+        _buf_pos = self._bitmap_size + data_offset + self._varying_offs
         self._chunk_data_stream._setbytepos(_buf_pos)
 
         s = self._chunk_data_stream.read('uintle:8')
