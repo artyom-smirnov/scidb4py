@@ -69,7 +69,7 @@ class Connection(object):
 
         return Array(self._result, self._net) if self._result.selective else None
 
-    def commit(self):
+    def complete(self):
         """
         Commit query
         """
@@ -77,7 +77,7 @@ class Connection(object):
         self._net.send(Message(h))
         self._net.receive()
 
-    def rollback(self):
+    def cancel(self):
         """
         Rollback query
         """
