@@ -56,7 +56,7 @@ def make_chunk(chunk_msg, array):
     for i, coord in enumerate(rec.coordinates):
         dim = array.schema.dimensions[i]
         end_coord = coord + dim.chunk_interval - 1
-        end_coord = dim.end_max if end_coord > dim.end_max else end_coord
+        end_coord = dim.end if end_coord > dim.end else end_coord
         start_pos.append(coord)
         end_pos.append(end_coord)
         chunk_len.append(end_coord - coord + 1)

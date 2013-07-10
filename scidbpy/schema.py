@@ -16,7 +16,7 @@ Copyright (c) 2013, Artyom Smirnov <artyom_smirnov@icloud.com>
 """
 
 
-class Attribute:
+class Attribute(object):
     def __init__(self, att_id, name, type_id, flags):
         """
 
@@ -73,8 +73,9 @@ class Attribute:
         return self.name + ':' + self.type
 
 
-class Dimension:
-    def __init__(self, name, type_id, flags, start_min, curr_start, curr_end, end_max, chunk_interval):
+class Dimension(object):
+    def __init__(self, name, type_id, flags, start, end, chunk_interval,
+                 mapping_array_name=None, coordinates_mapping_size=0, coordinates_mapping=None):
         """
         :param name: Dimension name
         :param type_id: Dimension type
@@ -82,11 +83,12 @@ class Dimension:
         self._name = name
         self._type_id = type_id
         self._flags = flags
-        self._start_min = start_min
-        self._curr_start = curr_start
-        self._curr_end = curr_end
-        self._end_max = end_max
+        self._start = start
+        self._end = end
         self._chunk_interval = chunk_interval
+        self._mapping_array_name = mapping_array_name
+        self._coordinates_mapping_size = coordinates_mapping_size
+        self._coordinates_mapping = coordinates_mapping
 
     @property
     def name(self):
@@ -113,24 +115,28 @@ class Dimension:
         return self._flags
 
     @property
-    def start_min(self):
-        return self._start_min
+    def start(self):
+        return self._start
 
     @property
-    def curr_start(self):
-        return self._curr_start
-
-    @property
-    def curr_end(self):
-        return self._curr_end
-
-    @property
-    def end_max(self):
-        return self._end_max
+    def end(self):
+        return self._end
 
     @property
     def chunk_interval(self):
         return self._chunk_interval
+
+    @property
+    def mapping_array_name(self):
+        return self._mapping_array_name
+
+    @property
+    def coordinates_mapping_size(self):
+        return self._coordinates_mapping_size
+
+    @property
+    def coordinates_mapping(self):
+        return self._coordinates_mapping
 
     def __str__(self):
         return self.name + '(' + self.type + ')'

@@ -18,12 +18,13 @@ import scidb_msg_pb2
 from scidbpy.chunk import make_chunk
 from scidbpy._message import Header, mtFetch, Message
 from types import *
+from schema import *
 
 
 class Array(object):
-    def __init__(self, result, network):
-        self._query_id = result.query_id
-        self._schema = result.schema
+    def __init__(self, query_id, schema, network):
+        self._query_id = query_id
+        self._schema = schema
         self._net = network
         self._array_end = False
         self._chunks = []
@@ -34,7 +35,37 @@ class Array(object):
         for a in self.schema.attributes:
             self._attributes_name_id_mapping[a.name] = a.id
 
+        self._nid_mapping = {}
+        for d in self.schema.dimensions:
+            if d.type != TID_INT64:
+                if is_scidb_type(d.type):
+                    label_attr = 'value'
+                    attributes = [
+                        Attribute(0, 'value', d.type, 0),
+                    ]
+                else:
+                    label_attr = 'label'
+                    attributes = [
+                        Attribute(0, 'value', TID_VOID, 0),
+                        Attribute(1, 'label', TID_STRING, 0)
+                    ]
+
+                dimensions = [Dimension('no', TID_INT64, 0, d.start, d.start + d.coordinates_mapping_size - 1, d.coordinates_mapping_size)]
+                mapping_array = Array(query_id,
+                                      Schema(d.mapping_array_name,
+                                             attributes,
+                                             dimensions
+                                             ),
+                                      network)
+                mapping = []
+                for dim, att in mapping_array:
+                    mapping.append({dim['no']: att[label_attr]})
+                self._nid_mapping[d.name] = mapping
+
         self.next_chunk()
+
+    def nid_mapping(self, dimension):
+        return self._nid_mapping[dimension]
 
     def next_chunk(self):
         """

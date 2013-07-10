@@ -32,6 +32,7 @@ TID_STRING      = "string"
 TID_DATETIME    = "datetime"
 TID_DATETIMEZ   = "datetimetz"
 TID_BINARY      = "binary"
+TID_VOID        = "void"
 
 BUILTIN_TYPES = {
     TID_INDICATOR:    1,
@@ -50,7 +51,8 @@ BUILTIN_TYPES = {
     TID_STRING:       0,
     TID_DATETIME:     64,
     TID_DATETIMEZ:    128,
-    TID_BINARY:       0
+    TID_BINARY:       0,
+    TID_VOID:         0
 }
 
 

@@ -32,7 +32,6 @@ class Connection(object):
         self._host = host
         self._port = port
         self._net = Network(host, port)
-        self._result = None
 
     def open(self):
         """
@@ -67,7 +66,7 @@ class Connection(object):
         msg = self._net.receive()
         self._result = Result(msg)
 
-        return Array(self._result, self._net) if self._result.selective else None
+        return Array(self._query_id, self._result.schema, self._net) if self._result.selective else None
 
     def complete(self):
         """

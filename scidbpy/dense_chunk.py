@@ -60,7 +60,8 @@ class DenseChunk(object):
             TID_DOUBLE: self._get_double,
             TID_CHAR: self._get_char,
             TID_BOOL: self._get_bool,
-            TID_STRING: self._get_string
+            TID_STRING: self._get_string,
+            TID_VOID: None
         }[attribute.type]
 
     def next_item(self):

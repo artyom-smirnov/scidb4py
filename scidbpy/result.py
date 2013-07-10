@@ -39,10 +39,11 @@ class Result(object):
                         d.type_id,
                         d.flags,
                         d.start_min,
-                        d.curr_start,
-                        d.curr_end,
                         d.end_max,
-                        d.chunk_interval
+                        d.chunk_interval,
+                        d.mapping_array_name,
+                        d.coordinates_mapping_size,
+                        d.coordinates_mapping
                     )
                 )
             self._schema = Schema(array_name, attributes, dimensions)
