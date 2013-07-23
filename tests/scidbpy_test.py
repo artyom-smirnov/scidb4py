@@ -16,7 +16,10 @@ Copyright (c) 2013, Artyom Smirnov <artyom_smirnov@icloud.com>
 """
 
 import unittest
+import os
 from scidbpy import Connection
+
+scidb_host = 'localhost'
 
 
 class Basic(unittest.TestCase):
@@ -24,7 +27,7 @@ class Basic(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.connection = Connection('10.81.1.145')
+        cls.connection = Connection(scidb_host)
         cls.connection.open()
 
     @classmethod
@@ -40,4 +43,5 @@ class Basic(unittest.TestCase):
             a.next_item(True)
 
 if __name__ == '__main__':
+    scidb_host = os.getenv('SCIDB_HOST', scidb_host)
     unittest.main()
