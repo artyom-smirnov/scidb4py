@@ -1,6 +1,6 @@
 # scidbpy
 
-Pure python SciDB client library implementation
+Pure python SciDB client library
 
 ## Runtime dependencies
 * python >= 2.7 or pypy >= 1.8 (python 3 not supported yet)
