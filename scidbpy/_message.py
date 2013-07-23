@@ -80,7 +80,6 @@ class Header(object):
             self._query_id
         ) = unpack_from(self._fmt, buf)
 
-
     @property
     def protocol_version(self):
         return self._protocol_version

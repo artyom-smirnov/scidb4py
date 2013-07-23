@@ -18,8 +18,8 @@ Copyright (c) 2013, Artyom Smirnov <artyom_smirnov@icloud.com>
 import socket
 
 import scidb_msg_pb2
-from scidbpy._message import *
-from scidbpy.error import *
+from _message import *
+from error import *
 
 
 class Network(object):
@@ -30,6 +30,7 @@ class Network(object):
         """
         self._host = host
         self._port = port
+        self._socket = None
 
     def open(self):
         self._socket = socket.create_connection((self._host, self._port))

@@ -15,9 +15,9 @@ Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 Copyright (c) 2013, Artyom Smirnov <artyom_smirnov@icloud.com>
 """
 
-from scidbpy.connection import Connection
-from scidbpy.error import ExecutionError, InternalError
-from scidbpy.array import Array
-from scidbpy.schema import Schema
-from scidbpy.result import Result
-from scidbpy.rle_chunk import RLEChunk
+from connection import Connection
+from error import ExecutionError, InternalError
+from array import Array
+from schema import Schema
+from result import Result
+from rle_chunk import RLEChunk

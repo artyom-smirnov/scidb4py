@@ -14,7 +14,7 @@ Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 Copyright (c) 2013, Artyom Smirnov <artyom_smirnov@icloud.com>
 """
-from scidbpy.error import InternalError
+from error import InternalError
 from bitstring import ConstBitStream
 
 RLE_BITMAP_PAYLOAD_MAGIC = 0xeeeeaaaa00eebaacL

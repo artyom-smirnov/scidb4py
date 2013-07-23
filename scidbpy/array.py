@@ -15,8 +15,8 @@ Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 Copyright (c) 2013, Artyom Smirnov <artyom_smirnov@icloud.com>
 """
 import scidb_msg_pb2
-from scidbpy.chunk import make_chunk
-from scidbpy._message import Header, mtFetch, Message
+from chunk import make_chunk
+from _message import Header, mtFetch, Message
 from types import *
 from schema import *
 
@@ -78,7 +78,9 @@ class Array(object):
         self._chunks = []
         for a in self.schema.attributes:
             r = scidb_msg_pb2.Fetch()
+            #noinspection PyUnresolvedReferences
             r.attribute_id = a.id
+            #noinspection PyUnresolvedReferences
             r.array_name = self.schema.array_name
 
             h = Header(mtFetch, record_size=r.ByteSize(), query_id=self._query_id)

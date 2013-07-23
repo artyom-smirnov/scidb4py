@@ -14,7 +14,7 @@ Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 Copyright (c) 2013, Artyom Smirnov <artyom_smirnov@icloud.com>
 """
-from scidbpy.schema import *
+from schema import *
 
 
 class Result(object):

@@ -22,8 +22,8 @@ conn = Connection('localhost', 1239)
 conn.open()
 conn.prepare("select * from array(<a:int32>[x=0:3,2,0], '[0,1,2,3]')")
 array = conn.execute()
-for cell in array:
-    print '%d - %d' % (cell[0]['x'], cell[1]['a'])
+for pos, val in array:
+    print '%d - %d' % (pos['x'], val['a'])
 conn.close()
 ```
 

@@ -14,9 +14,9 @@ Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 Copyright (c) 2013, Artyom Smirnov <artyom_smirnov@icloud.com>
 """
-from scidbpy.error import InternalError
 from bitstring import ConstBitStream
 from types import *
+from error import InternalError
 
 RLE_PAYLOAD_MAGIC = 0xddddaaaa000eaaacL
 
@@ -191,59 +191,59 @@ class RLEChunk(object):
         return coords
 
     def _get_int8(self):
-        self._chunk_data_stream._setbytepos(self._cur_value_index)
+        self._chunk_data_stream.bytepos = self._cur_value_index
         return self._chunk_data_stream.read('intle:8')
 
     def _get_int16(self):
-        self._chunk_data_stream._setbytepos(self._cur_value_index)
+        self._chunk_data_stream.bytepos = self._cur_value_index
         return self._chunk_data_stream.read('intle:16')
 
     def _get_int32(self):
-        self._chunk_data_stream._setbytepos(self._cur_value_index)
+        self._chunk_data_stream.bytepos = self._cur_value_index
         return self._chunk_data_stream.read('intle:32')
 
     def _get_int64(self):
-        self._chunk_data_stream._setbytepos(self._cur_value_index)
+        self._chunk_data_stream.bytepos = self._cur_value_index
         return self._chunk_data_stream.read('intle:64')
 
     def _get_uint8(self):
-        self._chunk_data_stream._setbytepos(self._cur_value_index)
+        self._chunk_data_stream.bytepos = self._cur_value_index
         return self._chunk_data_stream.read('uintle:8')
 
     def _get_uint16(self):
-        self._chunk_data_stream._setbytepos(self._cur_value_index)
+        self._chunk_data_stream.bytepos = self._cur_value_index
         return self._chunk_data_stream.read('uintle:16')
 
     def _get_uint32(self):
-        self._chunk_data_stream._setbytepos(self._cur_value_index)
+        self._chunk_data_stream.bytepos = self._cur_value_index
         return self._chunk_data_stream.read('uintle:32')
 
     def _get_uint64(self):
-        self._chunk_data_stream._setbytepos(self._cur_value_index)
+        self._chunk_data_stream.bytepos = self._cur_value_index
         return self._chunk_data_stream.read('uintle:64')
 
     def _get_float(self):
-        self._chunk_data_stream._setbytepos(self._cur_value_index)
+        self._chunk_data_stream.bytepos = self._cur_value_index
         return self._chunk_data_stream.read('floatle:32')
 
     def _get_double(self):
-        self._chunk_data_stream._setbytepos(self._cur_value_index)
+        self._chunk_data_stream.bytepos = self._cur_value_index
         return self._chunk_data_stream.read('floatle:64')
 
     def _get_char(self):
-        self._chunk_data_stream._setbytepos(self._cur_value_index)
+        self._chunk_data_stream.bytepos = self._cur_value_index
         return chr(self._chunk_data_stream.read('intle:8'))
 
     def _get_bool(self):
         p = self._cur_value_index - self._payload_start
-        self._chunk_data_stream._setbytepos(self._payload_start + (p >> 3))
+        self._chunk_data_stream.bytepos = self._payload_start + (p >> 3)
         b = self._chunk_data_stream.read('intle:8')
         return (b & (1 << (p & 7))) != 0
 
     def _get_string(self):
-        self._chunk_data_stream._setbytepos(self._cur_value_index)
+        self._chunk_data_stream.bytepos = self._cur_value_index
         offset = self._chunk_data_stream.read('intle:32')
-        self._chunk_data_stream._setbytepos(self._payload_start + self._chunk_header._var_offs + offset)
+        self._chunk_data_stream.bytepos = self._payload_start + self._chunk_header.var_offs + offset
         b = self._chunk_data_stream.read('intle:8')
         if b == 0:
             size = self._chunk_data_stream.read('intle:32')
@@ -263,6 +263,6 @@ class RLEChunk(object):
         size = 4 if self._chunk_header.elem_size == 0 else self._chunk_header.elem_size
 
         if seg.same:
-            self._cur_value_index = self._payload_start + seg._value_index * size
+            self._cur_value_index = self._payload_start + seg.value_index * size
         else:
-            self._cur_value_index = self._payload_start + (seg._value_index + self._cur_item_in_seg) * size
+            self._cur_value_index = self._payload_start + (seg.value_index + self._cur_item_in_seg) * size
