@@ -15,7 +15,7 @@ Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 Copyright (c) 2013, Artyom Smirnov <artyom_smirnov@icloud.com>
 """
 
-import scidb_msg_pb2
+import _scidb_msg_pb2
 from array import Array
 from _message import *
 from _network import Network
@@ -48,7 +48,7 @@ class Connection(object):
         self._net.close()
 
     def execute(self, query_string, afl=False):
-        r = scidb_msg_pb2.Query()
+        r = _scidb_msg_pb2.Query()
         #noinspection PyUnresolvedReferences
         r.query = query_string
         #noinspection PyUnresolvedReferences
@@ -60,7 +60,7 @@ class Connection(object):
         msg = self._net.receive()
         self._query_id = msg.header.query_id
 
-        r = scidb_msg_pb2.Query()
+        r = _scidb_msg_pb2.Query()
         #noinspection PyUnresolvedReferences
         r.query = ''
         #noinspection PyUnresolvedReferences

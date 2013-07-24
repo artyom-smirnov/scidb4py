@@ -22,8 +22,8 @@ import sys
 import subprocess
 
 protoc = find_executable("protoc")
-protoc_in = 'scidbpy/scidb_msg.proto'
-protoc_out = 'scidbpy/scidb_msg_pb2.py'
+protoc_in = 'scidbpy/_scidb_msg.proto'
+protoc_out = 'scidbpy/_scidb_msg_pb2.py'
 
 if (not os.path.exists(protoc_out) or
         (os.path.getmtime(protoc_in) > os.path.getmtime(protoc_out))):

@@ -17,7 +17,7 @@ Copyright (c) 2013, Artyom Smirnov <artyom_smirnov@icloud.com>
 
 import socket
 
-import scidb_msg_pb2
+import _scidb_msg_pb2
 from _message import *
 from error import *
 
@@ -55,15 +55,15 @@ class Network(object):
         if h.record_size > 0:
             recBuf = self._socket.recv(h.record_size)
             if h.message_type == mtError:
-                rec = scidb_msg_pb2.Error()
+                rec = _scidb_msg_pb2.Error()
                 rec.ParseFromString(recBuf)
                 if rec.long_error_code == 0:
                     return None
                 raise ExecutionError(rec.what_str)
             elif h.message_type == mtQueryResult:
-                rec = scidb_msg_pb2.QueryResult()
+                rec = _scidb_msg_pb2.QueryResult()
             elif h.message_type == mtChunk:
-                rec = scidb_msg_pb2.Chunk()
+                rec = _scidb_msg_pb2.Chunk()
             else:
                 raise InternalError('Unknown network message %d' % h.message_type)
             rec.ParseFromString(recBuf)

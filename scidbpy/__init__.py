@@ -20,4 +20,4 @@ from error import ExecutionError, InternalError
 from array import Array
 from schema import Schema
 from result import Result
-from rle_chunk import RLEChunk
+from types import *

@@ -14,8 +14,8 @@ Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 Copyright (c) 2013, Artyom Smirnov <artyom_smirnov@icloud.com>
 """
-import scidb_msg_pb2
-from chunk import make_chunk
+import _scidb_msg_pb2
+from _chunk import make_chunk
 from _message import Header, mtFetch, Message
 from types import *
 from schema import *
@@ -77,7 +77,7 @@ class Array(object):
         self._chunk_end = False
         self._chunks = []
         for a in self.schema.attributes:
-            r = scidb_msg_pb2.Fetch()
+            r = _scidb_msg_pb2.Fetch()
             #noinspection PyUnresolvedReferences
             r.attribute_id = a.id
             #noinspection PyUnresolvedReferences

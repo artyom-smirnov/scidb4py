@@ -17,9 +17,9 @@ Copyright (c) 2013, Artyom Smirnov <artyom_smirnov@icloud.com>
 
 from scidbpy.error import InternalError
 from bitstring import ConstBitStream
-from rle_chunk import RLEChunk, RLE_PAYLOAD_MAGIC
-from rle_bitmap_chunk import RLEBitmapChunk, RLE_BITMAP_PAYLOAD_MAGIC
-from dense_chunk import DenseChunk
+from _rle_chunk import RLEChunk, RLE_PAYLOAD_MAGIC
+from _rle_bitmap_chunk import RLEBitmapChunk, RLE_BITMAP_PAYLOAD_MAGIC
+from _dense_chunk import DenseChunk
 
 
 class DummyEOFChunk(object):

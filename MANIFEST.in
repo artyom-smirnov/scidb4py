@@ -1,2 +1,2 @@
-include scidbpy/scidb_msg.proto
-exclude scidbpy/scidb_msg_pb2.py
+include scidbpy/_scidb_msg.proto
+exclude scidbpy/_scidb_msg_pb2.py
