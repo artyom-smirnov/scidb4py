@@ -23,6 +23,26 @@ from scidbpy.types import *
 scidb_host = os.getenv('SCIDB_HOST', 'localhost')
 
 
+class Cleanup(object):
+    def __init__(self, array_name):
+        self._array_name = array_name
+
+    def drop(self):
+        Basic.connection.execute("drop array %s" % self._array_name)
+        Basic.connection.complete()
+        pass
+
+    def __call__(self, function):
+        def func(*args, **kwargs):
+            try:
+                function(*args, **kwargs)
+                self.drop()
+            except:
+                self.drop()
+                raise
+        return func
+
+
 class Basic(unittest.TestCase):
     connection = None
 
@@ -31,18 +51,6 @@ class Basic(unittest.TestCase):
     def setUpClass(cls):
         cls.connection = Connection(scidb_host)
         cls.connection.open()
-
-        try:
-            cls.connection.execute("drop array A")
-            cls.connection.complete()
-        except:
-            pass
-
-        try:
-            cls.connection.execute("drop array B")
-            cls.connection.complete()
-        except:
-            pass
 
     @classmethod
     def tearDownClass(cls):
@@ -87,6 +95,7 @@ class Basic(unittest.TestCase):
         self.assertEqual(a.schema.dimensions[0].mapping_array_name, '')
         self.assertEqual(a.schema.dimensions[1].mapping_array_name, '')
 
+    @Cleanup("A")
     def test_non_selective(self):
         a = self.connection.execute("create array A <a:int32 null> [x=0:2,3,0, y=0:2,3,0]")
         self.connection.complete()
@@ -97,11 +106,6 @@ class Basic(unittest.TestCase):
         self.connection.complete()
         self.assertNotEqual(a, None)
         self.assertTrue(self.connection.result.selective)
-
-        a = self.connection.execute("drop array A")
-        self.connection.complete()
-        self.assertEqual(a, None)
-        self.assertFalse(self.connection.result.selective)
 
     def test_int8(self):
         a = self.connection.execute("select * from array(<a:int8, b:int8 null>[x=0:3,2,0], '[(1,2)()][(4,5)(6,null)]')")
@@ -226,6 +230,7 @@ class Basic(unittest.TestCase):
 
         self.assertEqual(res, 'x:0 a:a b:b, x:2 a:c b:d, x:3 a:e b:None, ')
 
+    @Cleanup("A")
     def test_mapping_arrays(self):
         r = self.connection.execute("create array A <x:int64> [a(string)=3,3,0]")
         self.connection.complete()
@@ -243,11 +248,6 @@ class Basic(unittest.TestCase):
         self.assertEqual(res, "{0L: 'aaa'}{u'a': 0L, 0: 0L}{0: 0, u'x': 0}\n"
                               "{1L: 'bbb'}{u'a': 1L, 0: 1L}{0: 1, u'x': 1}\n"
                               "{2L: 'ccc'}{u'a': 2L, 0: 2L}{0: 2, u'x': 2}\n")
-
-        r = self.connection.execute("drop array A")
-        self.connection.complete()
-        self.assertEqual(r, None)
-        self.assertFalse(self.connection.result.selective)
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(Basic)
