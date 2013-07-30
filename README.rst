@@ -39,8 +39,7 @@ Iterating through array item-by-item
     from scidb4py import Connection
     conn = Connection('localhost', 1239)
     conn.open()
-    conn.prepare("select * from array(<a:int32>[x=0:3,2,0], '[0,1,2,3]')")
-    array = conn.execute()
+    array = conn.execute("select * from array(<a:int32>[x=0:3,2,0], '[0,1,2,3]')")
     for pos, val in array:
         print '%d - %d' % (pos['x'], val['a'])
     conn.close()
@@ -53,8 +52,7 @@ Iterating through array chunk-by-chunk, item-by-item
     from scidb4py import Connection
     conn = Connection('localhost', 1239)
     conn.open()
-    conn.prepare("select * from array(<a:int32 null>[x=0:2,3,0, y=0:2,3,0], '[[1,2,3][4,5,6][7,8,9]]')")
-    array = conn.execute()
+    array = conn.execute("select * from array(<a:int32 null>[x=0:2,3,0, y=0:2,3,0], '[[1,2,3][4,5,6][7,8,9]]')")
     while not array.end:
         while not array.chunk_end:
             print '%s - %s' % (array.get_coordinates(), array.get_item("a"))
