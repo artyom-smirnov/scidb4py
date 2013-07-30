@@ -6,7 +6,7 @@ Pure python SciDB client library.
 This library aims to provide access to SciDB server through native network protocol based on protobuf. It still on early
 stages of development, so do not expect complete features support and stable work :)
 
-Any feedback and patches are welcome: https://github.com/artyom-smirnov/scidbpy/
+Any feedback and patches are welcome: https://github.com/artyom-smirnov/scidb4py/
 
 Runtime dependencies
 --------------------
