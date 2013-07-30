@@ -249,6 +249,26 @@ class Basic(unittest.TestCase):
                               "{1L: 'bbb'}{u'a': 1L, 0: 1L}{0: 1, u'x': 1}\n"
                               "{2L: 'ccc'}{u'a': 2L, 0: 2L}{0: 2, u'x': 2}\n")
 
+    def test_zlib(self):
+        a = self.connection.execute(
+            "select * from array(<a:int32 compression 'zlib'>[x=0:3,2,0], '[1,2][3,4]')")
+
+        res = ''
+        for pos, val in a:
+            res += ('x:%d a:%s, ' % (pos['x'], val['a']))
+
+        self.assertEqual(res, 'x:0 a:1, x:1 a:2, x:2 a:3, x:3 a:4, ')
+
+    def test_bzlib(self):
+        a = self.connection.execute(
+            "select * from array(<a:int32 compression 'bzlib'>[x=0:3,2,0], '[1,2][3,4]')")
+
+        res = ''
+        for pos, val in a:
+            res += ('x:%d a:%s, ' % (pos['x'], val['a']))
+
+        self.assertEqual(res, 'x:0 a:1, x:1 a:2, x:2 a:3, x:3 a:4, ')
+
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(Basic)
     unittest.TextTestRunner(verbosity=2).run(suite)

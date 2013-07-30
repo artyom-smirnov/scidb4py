@@ -20,7 +20,7 @@ from bitstring import ConstBitStream
 from _rle_chunk import RLEChunk, RLE_PAYLOAD_MAGIC
 from _rle_bitmap_chunk import RLEBitmapChunk, RLE_BITMAP_PAYLOAD_MAGIC
 from _dense_chunk import DenseChunk
-
+from _decompressor import decompress
 
 class DummyEOFChunk(object):
     @property
@@ -49,7 +49,7 @@ def make_chunk(chunk_msg, array):
         raise NotImplementedError('Sparse chunks not supported yet')
 
     if compression_method != 0:
-        raise NotImplementedError('Compressed chunks not supported yet')
+        chunk_data = decompress(compression_method, chunk_data)
 
     start_pos = []
     end_pos = []
