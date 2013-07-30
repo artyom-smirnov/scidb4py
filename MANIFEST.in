@@ -1,2 +1,3 @@
 include scidbpy/_scidb_msg.proto
+include README.rst
 exclude scidbpy/_scidb_msg_pb2.py
