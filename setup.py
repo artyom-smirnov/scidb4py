@@ -42,7 +42,7 @@ if (not os.path.exists(protoc_out) or
         sys.exit(1)
 
 setup(name='scidb4py',
-      version='0.0.4',
+      version='0.0.5',
       description='Pure python SciDB client library implementation',
       long_description=open('README.rst').read(),
       url='https://github.com/artyom-smirnov/scidb4py',
