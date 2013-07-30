@@ -1,5 +1,5 @@
 """
-This file is part of scidbpy.  scidbpy is free software: you can
+This file is part of scidb4py.  scidb4py is free software: you can
 redistribute it and/or modify it under the terms of the GNU General Public
 License as published by the Free Software Foundation, version 3.
 
@@ -22,8 +22,8 @@ import sys
 import subprocess
 
 protoc = find_executable("protoc")
-protoc_in = 'scidbpy/_scidb_msg.proto'
-protoc_out = 'scidbpy/_scidb_msg_pb2.py'
+protoc_in = 'scidb4py/_scidb_msg.proto'
+protoc_out = 'scidb4py/_scidb_msg_pb2.py'
 
 if (not os.path.exists(protoc_out) or
         (os.path.getmtime(protoc_in) > os.path.getmtime(protoc_out))):
@@ -41,15 +41,15 @@ if (not os.path.exists(protoc_out) or
     if subprocess.call(protoc_command) != 0:
         sys.exit(1)
 
-setup(name='scidbpy',
+setup(name='scidb4py',
       version='0.0.3',
       description='Pure python SciDB client library implementation',
       long_description=open('README.rst').read(),
-      url='https://github.com/artyom-smirnov/scidbpy',
+      url='https://github.com/artyom-smirnov/scidb4py',
       author='Artyom Smirnov',
       author_email='artyom_smirnov@icloud.com',
       license='GPLv3',
-      packages=['scidbpy'],
+      packages=['scidb4py'],
       platforms=['any'],
       requires=['protobuf', 'bitstring'],
       classifiers=[

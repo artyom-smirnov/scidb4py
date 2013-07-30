@@ -1,5 +1,5 @@
 """
-This file is part of scidbpy.  scidbpy is free software: you can
+This file is part of scidb4py.  scidb4py is free software: you can
 redistribute it and/or modify it under the terms of the GNU General Public
 License as published by the Free Software Foundation, version 3.
 
@@ -157,7 +157,7 @@ class Array(object):
         """
         Get chunk by attribute id
         :param attribute_id: attribute id
-        :rtype : scidbpy.rle_chunk.RLEChunk
+        :rtype : scidb4py.rle_chunk.RLEChunk
         :return: chunk
         """
         if isinstance(attribute_id, int):

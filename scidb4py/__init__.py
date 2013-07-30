@@ -1,5 +1,5 @@
 """
-This file is part of scidbpy.  scidbpy is free software: you can
+This file is part of scidb4py.  scidb4py is free software: you can
 redistribute it and/or modify it under the terms of the GNU General Public
 License as published by the Free Software Foundation, version 3.
 
@@ -15,10 +15,9 @@ Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 Copyright (c) 2013, Artyom Smirnov <artyom_smirnov@icloud.com>
 """
 
-
-class ExecutionError(Exception):
-    pass
-
-
-class InternalError(Exception):
-    pass
+from connection import Connection
+from error import ExecutionError, InternalError
+from array import Array
+from schema import Schema
+from result import Result
+from types import *

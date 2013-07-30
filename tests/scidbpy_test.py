@@ -1,5 +1,5 @@
 """
-This file is part of scidbpy.  scidbpy is free software: you can
+This file is part of scidb4py.  scidb4py is free software: you can
 redistribute it and/or modify it under the terms of the GNU General Public
 License as published by the Free Software Foundation, version 3.
 
@@ -17,8 +17,8 @@ Copyright (c) 2013, Artyom Smirnov <artyom_smirnov@icloud.com>
 
 import unittest
 import os
-from scidbpy import Connection
-from scidbpy.types import *
+from scidb4py import Connection
+from scidb4py.types import *
 
 scidb_host = os.getenv('SCIDB_HOST', 'localhost')
 

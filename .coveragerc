@@ -1,6 +1,6 @@
 [run]
 branch = True
-source = scidbpy
+source = scidb4py
 
 [report]
 exclude_lines =
@@ -8,4 +8,4 @@ exclude_lines =
 	raise NotImplementedError
 
 [html]
-title = scidbpy tests coverate report
+title = scidb4py tests coverate report

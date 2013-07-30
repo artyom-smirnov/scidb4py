@@ -1,5 +1,5 @@
 """
-This file is part of scidbpy.  scidbpy is free software: you can
+This file is part of scidb4py.  scidb4py is free software: you can
 redistribute it and/or modify it under the terms of the GNU General Public
 License as published by the Free Software Foundation, version 3.
 
@@ -15,7 +15,7 @@ Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 Copyright (c) 2013, Artyom Smirnov <artyom_smirnov@icloud.com>
 """
 
-from scidbpy.error import InternalError
+from scidb4py.error import InternalError
 from bitstring import ConstBitStream
 from _rle_chunk import RLEChunk, RLE_PAYLOAD_MAGIC
 from _rle_bitmap_chunk import RLEBitmapChunk, RLE_BITMAP_PAYLOAD_MAGIC

@@ -1,5 +1,5 @@
-scidbpy
-=======
+scidb4py — SciDB for Python
+===========================
 
 Pure python SciDB client library.
 
@@ -22,7 +22,7 @@ Installation
 ------------
 ::
 
-    sudo pip install scidbpy
+    sudo pip install scidb4py
 
 or
 
@@ -36,7 +36,7 @@ Iterating through array item-by-item
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ::
 
-    from scidbpy import Connection
+    from scidb4py import Connection
     conn = Connection('localhost', 1239)
     conn.open()
     conn.prepare("select * from array(<a:int32>[x=0:3,2,0], '[0,1,2,3]')")
@@ -50,7 +50,7 @@ Iterating through array chunk-by-chunk, item-by-item
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ::
 
-    from scidbpy import Connection
+    from scidb4py import Connection
     conn = Connection('localhost', 1239)
     conn.open()
     conn.prepare("select * from array(<a:int32 null>[x=0:2,3,0, y=0:2,3,0], '[[1,2,3][4,5,6][7,8,9]]')")
