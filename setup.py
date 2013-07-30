@@ -29,16 +29,22 @@ if (not os.path.exists(protoc_out) or
         (os.path.getmtime(protoc_in) > os.path.getmtime(protoc_out))):
     print "Generating %s..." % protoc_out
     if protoc is None:
-        sys.stderr.write("protoc is not installed\n")
-        sys.exit(-1)
+        sys.stderr.write(
+            "##################################################\n"
+            "# 'protoc' binary not found in PATH!             #\n"
+            "# You need 'protoc' for compiling protobuf file: #\n"
+            "# https://code.google.com/p/protobuf/            #\n"
+            "##################################################\n")
+        sys.exit(1)
 
     protoc_command = [protoc, "-I.", "--python_out=.", protoc_in]
     if subprocess.call(protoc_command) != 0:
-        sys.exit(-1)
+        sys.exit(1)
 
 setup(name='scidbpy',
       version='0.0.1',
       description='Pure python SciDB client library implementation',
+      long_description=open('README.rst').read(),
       url='https://github.com/artyom-smirnov/scidbpy',
       author='Artyom Smirnov',
       author_email='artyom_smirnov@icloud.com',
@@ -47,7 +53,7 @@ setup(name='scidbpy',
       platforms=['any'],
       requires=['protobuf', 'bitstring'],
       classifiers=[
-          'Development Status :: 1 - Planning',
+          'Development Status :: 2 - Pre-Alpha',
           'Topic :: Software Development :: Libraries',
           'Intended Audience :: Developers',
           'Intended Audience :: Science/Research',
