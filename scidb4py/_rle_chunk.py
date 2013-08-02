@@ -244,11 +244,12 @@ class RLEChunk(object):
         self._chunk_data_stream.bytepos = self._cur_value_index
         offset = self._chunk_data_stream.read('intle:32')
         self._chunk_data_stream.bytepos = self._payload_start + self._chunk_header.var_offs + offset
-        b = self._chunk_data_stream.read('intle:8')
+        b = self._chunk_data_stream.read('uintle:8')
         if b == 0:
             size = self._chunk_data_stream.read('intle:32')
         else:
             size = b
+
         chars = self._chunk_data_stream.read('bytes:%d' % (size - 1))
         return str(chars)
 
