@@ -48,7 +48,7 @@ def make_chunk(chunk_msg, array):
     if sparse:
         raise NotImplementedError('Sparse chunks not supported yet')
 
-    if compression_method != 0:
+    if compression_method != 0 and len(chunk_data) != rec.decompressed_size:
         chunk_data = decompress(compression_method, chunk_data)
 
     start_pos = []
