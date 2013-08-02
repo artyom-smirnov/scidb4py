@@ -22,8 +22,14 @@ from _network import Network
 from result import Result
 from error import *
 
+
+QUERY_AUTO_NONE     = 0
+QUERY_AUTO_COMPLETE = 1
+QUERY_AUTO_CANCEL   = 2
+
+
 class Connection(object):
-    def __init__(self, host='localhost', port=1239):
+    def __init__(self, host='localhost', port=1239, auto=QUERY_AUTO_COMPLETE):
         """
         Constructor
         :param host: Host name or IP (default localhost)
@@ -34,6 +40,7 @@ class Connection(object):
         self._net = Network(host, port)
         self._result = None
         self._query_id = -1
+        self._auto = auto
 
     def open(self):
         """
@@ -45,9 +52,11 @@ class Connection(object):
         """
         Close connection
         """
+        self._complete_or_cancel()
         self._net.close()
 
     def execute(self, query_string, afl=False):
+        self._complete_or_cancel()
         r = _scidb_msg_pb2.Query()
         #noinspection PyUnresolvedReferences
         r.query = query_string
@@ -84,6 +93,7 @@ class Connection(object):
         self._net.send(Message(h))
         self._net.receive()
         self._query_id = -1
+        self._result = None
 
     def cancel(self):
         """
@@ -95,6 +105,7 @@ class Connection(object):
         self._net.send(Message(h))
         self._net.receive()
         self._query_id = -1
+        self._result = None
 
     @property
     def active(self):
@@ -103,3 +114,11 @@ class Connection(object):
     @property
     def result(self):
         return self._result
+
+    def _complete_or_cancel(self):
+        if not self.active:
+            return
+        if self._auto == QUERY_AUTO_COMPLETE:
+            self.complete()
+        elif self._auto == QUERY_AUTO_CANCEL:
+            self.cancel()
