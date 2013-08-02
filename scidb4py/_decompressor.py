@@ -17,12 +17,22 @@ Copyright (c) 2013, Artyom Smirnov <artyom_smirnov@icloud.com>
 import zlib
 import bz2
 
-ZLIB=6
-BZLIB=7
+# From include/array/Compressor.h
+NO_COMPRESSION = 0
+NULL_FILTER = 1
+RUN_LENGTH_ENCODING = 2
+BITMAP_ENCODING = 3
+NULL_SUPPRESSION = 4
+DICTIONARY_ENCODING = 5
+ZLIB = 6
+BZLIB = 7
 
 
 def decompress(compression_method, buf):
-    if compression_method == ZLIB:
+    # SciDB do not use format sensitive compressors so just ignore it
+    if compression_method in (NULL_FILTER, RUN_LENGTH_ENCODING, BITMAP_ENCODING, NULL_SUPPRESSION, DICTIONARY_ENCODING):
+        return buf
+    elif compression_method == ZLIB:
         return zlib.decompress(buf)
     elif compression_method == BZLIB:
         return bz2.decompress(buf)

@@ -249,7 +249,7 @@ class Basic(unittest.TestCase):
                               "{1L: 'bbb'}{u'a': 1L, 0: 1L}{0: 1, u'x': 1}\n"
                               "{2L: 'ccc'}{u'a': 2L, 0: 2L}{0: 2, u'x': 2}\n")
 
-    def test_zlib(self):
+    def test_compression_zlib(self):
         a = self.connection.execute(
             "select * from array(<a:int32 compression 'zlib'>[x=0:3,2,0], '[1,2][3,4]')")
 
@@ -259,9 +259,59 @@ class Basic(unittest.TestCase):
 
         self.assertEqual(res, 'x:0 a:1, x:1 a:2, x:2 a:3, x:3 a:4, ')
 
-    def test_bzlib(self):
+    def test_compression_bzlib(self):
         a = self.connection.execute(
             "select * from array(<a:int32 compression 'bzlib'>[x=0:3,2,0], '[1,2][3,4]')")
+
+        res = ''
+        for pos, val in a:
+            res += ('x:%d a:%s, ' % (pos['x'], val['a']))
+
+        self.assertEqual(res, 'x:0 a:1, x:1 a:2, x:2 a:3, x:3 a:4, ')
+
+    def test_compression_null_filter(self):
+        a = self.connection.execute(
+            "select * from array(<a:int32 compression 'null filter'>[x=0:3,2,0], '[1,2][3,4]')")
+
+        res = ''
+        for pos, val in a:
+            res += ('x:%d a:%s, ' % (pos['x'], val['a']))
+
+        self.assertEqual(res, 'x:0 a:1, x:1 a:2, x:2 a:3, x:3 a:4, ')
+
+    def test_compression_rle(self):
+        a = self.connection.execute(
+            "select * from array(<a:int32 compression 'rle'>[x=0:3,2,0], '[1,2][3,4]')")
+
+        res = ''
+        for pos, val in a:
+            res += ('x:%d a:%s, ' % (pos['x'], val['a']))
+
+        self.assertEqual(res, 'x:0 a:1, x:1 a:2, x:2 a:3, x:3 a:4, ')
+
+    def test_compression_bitmap_encoding(self):
+        a = self.connection.execute(
+            "select * from array(<a:int32 compression 'bitmap encoding'>[x=0:3,2,0], '[1,2][3,4]')")
+
+        res = ''
+        for pos, val in a:
+            res += ('x:%d a:%s, ' % (pos['x'], val['a']))
+
+        self.assertEqual(res, 'x:0 a:1, x:1 a:2, x:2 a:3, x:3 a:4, ')
+
+    def test_compression_dictionary(self):
+        a = self.connection.execute(
+            "select * from array(<a:int32 compression 'dictionary'>[x=0:3,2,0], '[1,2][3,4]')")
+
+        res = ''
+        for pos, val in a:
+            res += ('x:%d a:%s, ' % (pos['x'], val['a']))
+
+        self.assertEqual(res, 'x:0 a:1, x:1 a:2, x:2 a:3, x:3 a:4, ')
+
+    def test_compression_null_suppression(self):
+        a = self.connection.execute(
+            "select * from array(<a:int32 compression 'null suppression'>[x=0:3,2,0], '[1,2][3,4]')")
 
         res = ''
         for pos, val in a:
