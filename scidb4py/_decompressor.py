@@ -25,7 +25,6 @@ def decompress(compression_method, buf):
     if compression_method == ZLIB:
         return zlib.decompress(buf)
     elif compression_method == BZLIB:
-        # FIXME: By some reason it fails with IOError: invalid data stream
         return bz2.decompress(buf)
     else:
         raise NotImplementedError('Unknown or unsupported compression type: %d' % compression_method)
