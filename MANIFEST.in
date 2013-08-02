@@ -1,4 +1,2 @@
-include scidb4py/_scidb_msg.proto
-include README.rst
-include CHANGELOG.rst
+include scidb4py/_scidb_msg.proto README.rst CHANGELOG.rst LICENSE.txt
 exclude scidb4py/_scidb_msg_pb2.py
