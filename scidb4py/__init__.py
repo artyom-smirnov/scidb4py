@@ -21,3 +21,5 @@ from array import Array
 from schema import Schema
 from result import Result
 from types import *
+
+__version__ = '0.0.5'
