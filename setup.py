@@ -46,7 +46,7 @@ from scidb4py import __version__
 setup(name='scidb4py',
       version=__version__,
       description='Pure python SciDB client library implementation',
-      long_description=open('README.rst').read(),
+      long_description=open('README.rst').read() + '\n' + open('CHANGELOG.rst').read()
       url='https://github.com/artyom-smirnov/scidb4py',
       author='Artyom Smirnov',
       author_email='artyom_smirnov@icloud.com',
