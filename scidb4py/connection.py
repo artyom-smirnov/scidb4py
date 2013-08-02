@@ -20,7 +20,7 @@ from array import Array
 from _message import *
 from _network import Network
 from result import Result
-
+from error import *
 
 class Connection(object):
     def __init__(self, host='localhost', port=1239):
@@ -78,17 +78,27 @@ class Connection(object):
         """
         Commit query
         """
+        if not self.active:
+            raise InternalError('No active query to complete')
         h = Header(mtCompleteQuery, query_id=self._query_id)
         self._net.send(Message(h))
         self._net.receive()
+        self._query_id = -1
 
     def cancel(self):
         """
         Rollback query
         """
+        if not self.active:
+            raise InternalError('No active query to cancel')
         h = Header(mtCancelQuery, query_id=self._query_id)
         self._net.send(Message(h))
         self._net.receive()
+        self._query_id = -1
+
+    @property
+    def active(self):
+        return self._query_id != -1
 
     @property
     def result(self):
