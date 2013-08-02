@@ -331,6 +331,194 @@ class Basic(unittest.TestCase):
 
         self.assertEqual(res, 638137500)
 
+    @Cleanup("A")
+    def test_dense_int8(self):
+        r = self.connection.execute("create array A <x:int64> [a(int8)=3,3,0]")
+        self.connection.complete()
+        self.assertEqual(r, None)
+        self.assertFalse(self.connection.result.selective)
+
+        self.connection.execute("redimension_store(build(<a:int8>[x=0:2,3,0], '[1,2,3]', True), A)", afl=True)
+        self.connection.complete()
+
+        r = self.connection.execute("select * from A:a")
+        res = ''
+        for pos, val in r:
+            res += 'no:%d value:%d, ' % (pos["no"], val['value'])
+        self.connection.complete()
+        self.assertEqual(res, "no:0 value:1, no:1 value:2, no:2 value:3, ")
+
+    @Cleanup("A")
+    def test_dense_uint8(self):
+        r = self.connection.execute("create array A <x:int64> [a(uint8)=3,3,0]")
+        self.connection.complete()
+        self.assertEqual(r, None)
+        self.assertFalse(self.connection.result.selective)
+
+        self.connection.execute("redimension_store(build(<a:uint8>[x=0:2,3,0], '[1,2,3]', True), A)", afl=True)
+        self.connection.complete()
+
+        r = self.connection.execute("select * from A:a")
+        res = ''
+        for pos, val in r:
+            res += 'no:%d value:%d, ' % (pos["no"], val['value'])
+        self.connection.complete()
+        self.assertEqual(res, "no:0 value:1, no:1 value:2, no:2 value:3, ")
+
+    @Cleanup("A")
+    def test_dense_int16(self):
+        r = self.connection.execute("create array A <x:int64> [a(int16)=3,3,0]")
+        self.connection.complete()
+        self.assertEqual(r, None)
+        self.assertFalse(self.connection.result.selective)
+
+        self.connection.execute("redimension_store(build(<a:int16>[x=0:2,3,0], '[1,2,3]', True), A)", afl=True)
+        self.connection.complete()
+
+        r = self.connection.execute("select * from A:a")
+        res = ''
+        for pos, val in r:
+            res += 'no:%d value:%d, ' % (pos["no"], val['value'])
+        self.connection.complete()
+        self.assertEqual(res, "no:0 value:1, no:1 value:2, no:2 value:3, ")
+
+    @Cleanup("A")
+    def test_dense_uint16(self):
+        r = self.connection.execute("create array A <x:int64> [a(uint16)=3,3,0]")
+        self.connection.complete()
+        self.assertEqual(r, None)
+        self.assertFalse(self.connection.result.selective)
+
+        self.connection.execute("redimension_store(build(<a:uint16>[x=0:2,3,0], '[1,2,3]', True), A)", afl=True)
+        self.connection.complete()
+
+        r = self.connection.execute("select * from A:a")
+        res = ''
+        for pos, val in r:
+            res += 'no:%d value:%d, ' % (pos["no"], val['value'])
+        self.connection.complete()
+        self.assertEqual(res, "no:0 value:1, no:1 value:2, no:2 value:3, ")
+
+    @Cleanup("A")
+    def test_dense_int32(self):
+        r = self.connection.execute("create array A <x:int64> [a(int32)=3,3,0]")
+        self.connection.complete()
+        self.assertEqual(r, None)
+        self.assertFalse(self.connection.result.selective)
+
+        self.connection.execute("redimension_store(build(<a:int32>[x=0:2,3,0], '[1,2,3]', True), A)", afl=True)
+        self.connection.complete()
+
+        r = self.connection.execute("select * from A:a")
+        res = ''
+        for pos, val in r:
+            res += 'no:%d value:%d, ' % (pos["no"], val['value'])
+        self.connection.complete()
+        self.assertEqual(res, "no:0 value:1, no:1 value:2, no:2 value:3, ")
+
+    @Cleanup("A")
+    def test_dense_uint32(self):
+        r = self.connection.execute("create array A <x:int64> [a(uint32)=3,3,0]")
+        self.connection.complete()
+        self.assertEqual(r, None)
+        self.assertFalse(self.connection.result.selective)
+
+        self.connection.execute("redimension_store(build(<a:uint32>[x=0:2,3,0], '[1,2,3]', True), A)", afl=True)
+        self.connection.complete()
+
+        r = self.connection.execute("select * from A:a")
+        res = ''
+        for pos, val in r:
+            res += 'no:%d value:%d, ' % (pos["no"], val['value'])
+        self.connection.complete()
+        self.assertEqual(res, "no:0 value:1, no:1 value:2, no:2 value:3, ")
+
+    @Cleanup("A")
+    def test_dense_uint64(self):
+        r = self.connection.execute("create array A <x:int64> [a(uint64)=3,3,0]")
+        self.connection.complete()
+        self.assertEqual(r, None)
+        self.assertFalse(self.connection.result.selective)
+
+        self.connection.execute("redimension_store(build(<a:uint64>[x=0:2,3,0], '[1,2,3]', True), A)", afl=True)
+        self.connection.complete()
+
+        r = self.connection.execute("select * from A:a")
+        res = ''
+        for pos, val in r:
+            res += 'no:%d value:%d, ' % (pos["no"], val['value'])
+        self.connection.complete()
+        self.assertEqual(res, "no:0 value:1, no:1 value:2, no:2 value:3, ")
+
+    @Cleanup("A")
+    def test_dense_float(self):
+        r = self.connection.execute("create array A <x:int64> [a(float)=3,3,0]")
+        self.connection.complete()
+        self.assertEqual(r, None)
+        self.assertFalse(self.connection.result.selective)
+
+        self.connection.execute("redimension_store(build(<a:float>[x=0:2,3,0], '[1.1,2.2,3.3]', True), A)", afl=True)
+        self.connection.complete()
+
+        r = self.connection.execute("select * from A:a")
+        res = ''
+        for pos, val in r:
+            res += 'no:%d value:%.1f, ' % (pos["no"], val['value'])
+        self.connection.complete()
+        self.assertEqual(res, "no:0 value:1.1, no:1 value:2.2, no:2 value:3.3, ")
+
+    @Cleanup("A")
+    def test_dense_double(self):
+        r = self.connection.execute("create array A <x:int64> [a(double)=3,3,0]")
+        self.connection.complete()
+        self.assertEqual(r, None)
+        self.assertFalse(self.connection.result.selective)
+
+        self.connection.execute("redimension_store(build(<a:double>[x=0:2,3,0], '[1.1,2.2,3.3]', True), A)", afl=True)
+        self.connection.complete()
+
+        r = self.connection.execute("select * from A:a")
+        res = ''
+        for pos, val in r:
+            res += 'no:%d value:%.1f, ' % (pos["no"], val['value'])
+        self.connection.complete()
+        self.assertEqual(res, "no:0 value:1.1, no:1 value:2.2, no:2 value:3.3, ")
+
+    @Cleanup("A")
+    def test_dense_char(self):
+        r = self.connection.execute("create array A <x:int64> [a(char)=3,3,0]")
+        self.connection.complete()
+        self.assertEqual(r, None)
+        self.assertFalse(self.connection.result.selective)
+
+        self.connection.execute("redimension_store(build(<a:char>[x=0:2,3,0], '[q,w,e]', True), A)", afl=True)
+        self.connection.complete()
+
+        r = self.connection.execute("select * from A:a")
+        res = ''
+        for pos, val in r:
+            res += 'no:%d value:%s, ' % (pos["no"], val['value'])
+        self.connection.complete()
+        self.assertEqual(res, "no:0 value:e, no:1 value:q, no:2 value:w, ")
+
+    @Cleanup("A")
+    def test_dense_long_string(self):
+        r = self.connection.execute("create array A <x:int64> [a(string)=3,3,0]")
+        self.connection.complete()
+        self.assertEqual(r, None)
+        self.assertFalse(self.connection.result.selective)
+
+        self.connection.execute("redimension_store(build(<a:string>[x=0:2,3,0],"
+                                "'[%s, %s, %s]', True), A)" % ("q" * 255, "w" * 500, "e" * 1000, ), afl=True)
+        self.connection.complete()
+
+        r = self.connection.execute("select * from A:a")
+        res = ''
+        for pos, val in r:
+            res += 'no:%d value:%s, ' % (pos["no"], val['value'])
+        self.connection.complete()
+        self.assertEqual(res, "no:0 value:%s, no:1 value:%s, no:2 value:%s, " % ("e" * 1000, "q" * 255, "w" * 500, ))
+
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(Basic)
     unittest.TextTestRunner(verbosity=2).run(suite)
