@@ -222,6 +222,18 @@ class Basic(unittest.TestCase):
 
         self.assertEqual(res, 'x:0 a:foo b:bar, x:2 a:baz b:quux, x:3 a:zzz b:None, ')
 
+    def test_long_string(self):
+        a = self.connection.execute(
+            "select * from array(<a:string, b:string null>[x=0:3,2,0], '[(%s, %s)()][(%s, %s)(%s,null)]') " %\
+            ("a" * 500, "b" * 500, "c" * 500, "d" * 500, "e" * 500))
+
+        res = ''
+        for dim, att in a:
+            res += ('x:%d a:%s b:%s, ' % (dim['x'], att['a'], att['b']))
+
+        self.assertEqual(res, 'x:0 a:%s b:%s, x:2 a:%s b:%s, x:3 a:%s b:None, ' %\
+                              ("a" * 500, "b" * 500, "c" * 500, "d" * 500, "e" * 500))
+
     def test_char(self):
         a = self.connection.execute(
             "select * from array(<a:char, b:char null>[x=0:3,2,0], '[(a, b)()][(c, d)(e,null)]')")
@@ -231,6 +243,16 @@ class Basic(unittest.TestCase):
             res += ('x:%d a:%s b:%s, ' % (dim['x'], att['a'], att['b']))
 
         self.assertEqual(res, 'x:0 a:a b:b, x:2 a:c b:d, x:3 a:e b:None, ')
+
+    def test_bool(self):
+        a = self.connection.execute(
+            "select * from array(<a:bool, b:bool null>[x=0:3,2,0], '[(true, false)()][(false, true)(false,null)]')")
+
+        res = ''
+        for dim, att in a:
+            res += ('x:%d a:%s b:%s, ' % (dim['x'], att['a'], att['b']))
+
+        self.assertEqual(res, 'x:0 a:True b:False, x:2 a:False b:True, x:3 a:False b:None, ')
 
     @Cleanup("A")
     def test_mapping_arrays(self):
@@ -263,13 +285,14 @@ class Basic(unittest.TestCase):
 
     def test_compression_bzlib(self):
         a = self.connection.execute(
-            "select * from array(<a:int32 compression 'bzlib'>[x=0:3,2,0], '[1,2][3,4]')")
+            "select * from array(<a:string compression 'bzlib'>[x=0:3,2,0],"
+            "'[%s,%s][%s,%s]')" % ("a" * 200, "b" * 300, "c" * 200, "d" * 300))
 
         res = ''
         for pos, val in a:
             res += ('x:%d a:%s, ' % (pos['x'], val['a']))
 
-        self.assertEqual(res, 'x:0 a:1, x:1 a:2, x:2 a:3, x:3 a:4, ')
+        self.assertEqual(res, 'x:0 a:%s, x:1 a:%s, x:2 a:%s, x:3 a:%s, ' % ("a" * 200, "b" * 300, "c" * 200, "d" * 300))
 
     def test_compression_null_filter(self):
         a = self.connection.execute(
