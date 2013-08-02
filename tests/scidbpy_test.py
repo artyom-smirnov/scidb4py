@@ -100,14 +100,13 @@ class Basic(unittest.TestCase):
     @Cleanup("A")
     def test_non_selective(self):
         a = self.connection.execute("create array A <a:int32 null> [x=0:2,3,0, y=0:2,3,0]")
-        self.connection.complete()
         self.assertEqual(a, None)
-        self.assertFalse(self.connection.result.selective)
+        self.connection.complete()
 
         a = self.connection.execute("select * from array(A, '[[1,2,3][4,5,6][7,8,9]]')")
-        self.connection.complete()
         self.assertNotEqual(a, None)
         self.assertTrue(self.connection.result.selective)
+        self.connection.complete()
 
     def test_int8(self):
         a = self.connection.execute("select * from array(<a:int8, b:int8 null>[x=0:3,2,0], '[(1,2)()][(4,5)(6,null)]')")
@@ -257,9 +256,8 @@ class Basic(unittest.TestCase):
     @Cleanup("A")
     def test_mapping_arrays(self):
         r = self.connection.execute("create array A <x:int64> [a(string)=3,3,0]")
-        self.connection.complete()
         self.assertEqual(r, None)
-        self.assertFalse(self.connection.result.selective)
+        self.connection.complete()
 
         self.connection.execute("redimension_store(build(<a:string>[x=0:2,3,0], '[aaa,bbb,ccc]', True), A)", afl=True)
         self.connection.complete()
@@ -357,9 +355,8 @@ class Basic(unittest.TestCase):
     @Cleanup("A")
     def test_dense_int8(self):
         r = self.connection.execute("create array A <x:int64> [a(int8)=3,3,0]")
-        self.connection.complete()
         self.assertEqual(r, None)
-        self.assertFalse(self.connection.result.selective)
+        self.connection.complete()
 
         self.connection.execute("redimension_store(build(<a:int8>[x=0:2,3,0], '[1,2,3]', True), A)", afl=True)
         self.connection.complete()
@@ -374,9 +371,8 @@ class Basic(unittest.TestCase):
     @Cleanup("A")
     def test_dense_uint8(self):
         r = self.connection.execute("create array A <x:int64> [a(uint8)=3,3,0]")
-        self.connection.complete()
         self.assertEqual(r, None)
-        self.assertFalse(self.connection.result.selective)
+        self.connection.complete()
 
         self.connection.execute("redimension_store(build(<a:uint8>[x=0:2,3,0], '[1,2,3]', True), A)", afl=True)
         self.connection.complete()
@@ -391,9 +387,8 @@ class Basic(unittest.TestCase):
     @Cleanup("A")
     def test_dense_int16(self):
         r = self.connection.execute("create array A <x:int64> [a(int16)=3,3,0]")
-        self.connection.complete()
         self.assertEqual(r, None)
-        self.assertFalse(self.connection.result.selective)
+        self.connection.complete()
 
         self.connection.execute("redimension_store(build(<a:int16>[x=0:2,3,0], '[1,2,3]', True), A)", afl=True)
         self.connection.complete()
@@ -408,9 +403,8 @@ class Basic(unittest.TestCase):
     @Cleanup("A")
     def test_dense_uint16(self):
         r = self.connection.execute("create array A <x:int64> [a(uint16)=3,3,0]")
-        self.connection.complete()
         self.assertEqual(r, None)
-        self.assertFalse(self.connection.result.selective)
+        self.connection.complete()
 
         self.connection.execute("redimension_store(build(<a:uint16>[x=0:2,3,0], '[1,2,3]', True), A)", afl=True)
         self.connection.complete()
@@ -425,9 +419,8 @@ class Basic(unittest.TestCase):
     @Cleanup("A")
     def test_dense_int32(self):
         r = self.connection.execute("create array A <x:int64> [a(int32)=3,3,0]")
-        self.connection.complete()
         self.assertEqual(r, None)
-        self.assertFalse(self.connection.result.selective)
+        self.connection.complete()
 
         self.connection.execute("redimension_store(build(<a:int32>[x=0:2,3,0], '[1,2,3]', True), A)", afl=True)
         self.connection.complete()
@@ -442,9 +435,8 @@ class Basic(unittest.TestCase):
     @Cleanup("A")
     def test_dense_uint32(self):
         r = self.connection.execute("create array A <x:int64> [a(uint32)=3,3,0]")
-        self.connection.complete()
         self.assertEqual(r, None)
-        self.assertFalse(self.connection.result.selective)
+        self.connection.complete()
 
         self.connection.execute("redimension_store(build(<a:uint32>[x=0:2,3,0], '[1,2,3]', True), A)", afl=True)
         self.connection.complete()
@@ -459,9 +451,8 @@ class Basic(unittest.TestCase):
     @Cleanup("A")
     def test_dense_uint64(self):
         r = self.connection.execute("create array A <x:int64> [a(uint64)=3,3,0]")
-        self.connection.complete()
         self.assertEqual(r, None)
-        self.assertFalse(self.connection.result.selective)
+        self.connection.complete()
 
         self.connection.execute("redimension_store(build(<a:uint64>[x=0:2,3,0], '[1,2,3]', True), A)", afl=True)
         self.connection.complete()
@@ -476,9 +467,8 @@ class Basic(unittest.TestCase):
     @Cleanup("A")
     def test_dense_float(self):
         r = self.connection.execute("create array A <x:int64> [a(float)=3,3,0]")
-        self.connection.complete()
         self.assertEqual(r, None)
-        self.assertFalse(self.connection.result.selective)
+        self.connection.complete()
 
         self.connection.execute("redimension_store(build(<a:float>[x=0:2,3,0], '[1.1,2.2,3.3]', True), A)", afl=True)
         self.connection.complete()
@@ -493,9 +483,8 @@ class Basic(unittest.TestCase):
     @Cleanup("A")
     def test_dense_double(self):
         r = self.connection.execute("create array A <x:int64> [a(double)=3,3,0]")
-        self.connection.complete()
         self.assertEqual(r, None)
-        self.assertFalse(self.connection.result.selective)
+        self.connection.complete()
 
         self.connection.execute("redimension_store(build(<a:double>[x=0:2,3,0], '[1.1,2.2,3.3]', True), A)", afl=True)
         self.connection.complete()
@@ -510,9 +499,8 @@ class Basic(unittest.TestCase):
     @Cleanup("A")
     def test_dense_char(self):
         r = self.connection.execute("create array A <x:int64> [a(char)=3,3,0]")
-        self.connection.complete()
         self.assertEqual(r, None)
-        self.assertFalse(self.connection.result.selective)
+        self.connection.complete()
 
         self.connection.execute("redimension_store(build(<a:char>[x=0:2,3,0], '[q,w,e]', True), A)", afl=True)
         self.connection.complete()
@@ -527,9 +515,8 @@ class Basic(unittest.TestCase):
     @Cleanup("A")
     def test_dense_long_string(self):
         r = self.connection.execute("create array A <x:int64> [a(string)=3,3,0]")
-        self.connection.complete()
         self.assertEqual(r, None)
-        self.assertFalse(self.connection.result.selective)
+        self.connection.complete()
 
         self.connection.execute("redimension_store(build(<a:string>[x=0:2,3,0],"
                                 "'[%s, %s, %s]', True), A)" % ("q" * 255, "w" * 500, "e" * 1000, ), afl=True)
@@ -541,6 +528,52 @@ class Basic(unittest.TestCase):
             res += 'no:%d value:%s, ' % (pos["no"], val['value'])
         self.connection.complete()
         self.assertEqual(res, "no:0 value:%s, no:1 value:%s, no:2 value:%s, " % ("e" * 1000, "q" * 255, "w" * 500, ))
+
+    @Cleanup("A")
+    def test_complete_cancel(self):
+        r = self.connection.execute("create array A <a:string> [x=0:1,2,0]")
+        self.assertEqual(r, None)
+        self.connection.complete()
+
+        self.connection.execute("select * into A from array(A, '[qwerty, asdfg]')")
+        self.connection.cancel()
+
+        r = self.connection.execute("select * from A")
+        res = ''
+        for pos, val in r:
+            res += 'x:%d a:%s, ' % (pos["x"], val['a'])
+        self.assertEqual(res, "")
+        self.connection.complete()
+
+        self.connection.execute("select * into A from array(A, '[qwerty, asdfg]')")
+        self.connection.complete()
+
+        r = self.connection.execute("select * from A")
+        res = ''
+        for pos, val in r:
+            res += 'x:%d a:%s, ' % (pos["x"], val['a'])
+        self.assertEqual(res, "x:0 a:qwerty, x:1 a:asdfg, ")
+        self.connection.complete()
+
+        self.connection.execute("select * into A from array(A, '[12345, 54321]')")
+        self.connection.cancel()
+
+        r = self.connection.execute("select * from A")
+        res = ''
+        for pos, val in r:
+            res += 'x:%d a:%s, ' % (pos["x"], val['a'])
+        self.assertEqual(res, "x:0 a:qwerty, x:1 a:asdfg, ")
+        self.connection.complete()
+
+        self.connection.execute("select * into A from array(A, '[12345, 54321]')")
+        self.connection.complete()
+
+        r = self.connection.execute("select * from A")
+        res = ''
+        for pos, val in r:
+            res += 'x:%d a:%s, ' % (pos["x"], val['a'])
+        self.assertEqual(res, "x:0 a:12345, x:1 a:54321, ")
+        self.connection.complete()
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(Basic)
