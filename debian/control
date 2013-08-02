@@ -1,0 +1,21 @@
+Source: scidb4py
+Maintainer: Artyom Smirnov <artyom_smirnov@icloud.com>
+Section: python
+Priority: optional
+Build-Depends: python-all (>= 2.6.6-3), debhelper (>= 7), protobuf-compiler
+Standards-Version: 3.9.1
+
+Package: python-scidb4py
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}
+Description: Pure python SciDB client library implementation
+ scidb4py — SciDB for Python
+ ===========================
+ .
+ Pure python SciDB client library.
+ .
+ This library aims to provide access to SciDB server through native network protocol based on protobuf. It still on early
+ stages of development, so do not expect complete features support and stable work :)
+ .
+ Any feedback and patches are welcome: https://github.com/artyom-smirnov/scidb4py/
+
