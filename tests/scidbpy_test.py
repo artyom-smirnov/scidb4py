@@ -319,6 +319,16 @@ class Basic(unittest.TestCase):
 
         self.assertEqual(res, 'x:0 a:1, x:1 a:2, x:2 a:3, x:3 a:4, ')
 
+    def test_big_chunk(self):
+        a = self.connection.execute(
+            "select * from build(<a:int64>[x=0:1000,1000,0, y=0:50,50,0], x*y)")
+
+        res = 0
+        for pos, val in a:
+            res += val['a']
+
+        self.assertEqual(res, 638137500)
+
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(Basic)
     unittest.TextTestRunner(verbosity=2).run(suite)

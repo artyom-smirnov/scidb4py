@@ -39,21 +39,21 @@ class Network(object):
         self._socket.close()
 
     def send(self, message):
-        self._socket.send(message.header.get_buf())
+        self._socket.sendall(message.header.get_buf())
         rec = message.record
         if rec:
-            self._socket.send(rec.SerializeToString())
+            self._socket.sendall(rec.SerializeToString())
         binary = message.binary
         if binary:
-            self._socket.send(binary)
+            self._socket.sendall(binary)
 
     def receive(self):
         h = Header()
-        h.read_from_buf(self._socket.recv(Header.get_header_size()))
+        h.read_from_buf(self._socket.recv(Header.get_header_size(), socket.MSG_WAITALL))
 
         rec = None
         if h.record_size > 0:
-            recBuf = self._socket.recv(h.record_size)
+            recBuf = self._socket.recv(h.record_size, socket.MSG_WAITALL)
             if h.message_type == mtError:
                 rec = _scidb_msg_pb2.Error()
                 rec.ParseFromString(recBuf)
@@ -70,7 +70,7 @@ class Network(object):
 
         binBuf = None
         if h.binary_size > 0:
-            binBuf = self._socket.recv(h.binary_size)
+            binBuf = self._socket.recv(h.binary_size, socket.MSG_WAITALL)
 
         return Message(h, rec, binBuf)
 
