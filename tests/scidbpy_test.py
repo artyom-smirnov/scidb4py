@@ -38,6 +38,8 @@ class Cleanup(object):
                 function(*args, **kwargs)
                 self.drop()
             except:
+                if Basic.connection.active:
+                    Basic.connection.cancel()
                 self.drop()
                 raise
         return func
