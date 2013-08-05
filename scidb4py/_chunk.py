@@ -45,9 +45,6 @@ def make_chunk(chunk_msg, array):
     chunk_data = chunk_msg.binary
     rle = rec.rle
 
-    if sparse:
-        raise NotImplementedError('Sparse chunks not supported yet')
-
     if compression_method != NO_COMPRESSION and len(chunk_data) != rec.decompressed_size:
         chunk_data = decompress(compression_method, chunk_data)
 
@@ -72,5 +69,8 @@ def make_chunk(chunk_msg, array):
         else:
             raise InternalError('Unknown chunk format')
     else:
-        return DenseChunk(chunk_data, attribute, start_pos, end_pos, chunk_len, array.schema)
+        if sparse:
+            raise NotImplementedError('Sparse chunks not supported yet')
+        else:
+            return DenseChunk(chunk_data, attribute, start_pos, end_pos, chunk_len, array.schema)
 
